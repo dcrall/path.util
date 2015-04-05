@@ -1,6 +1,5 @@
 (ns path.core
-  (:use [clojure.string :only [blank? join split]])
-  (:import [java.util.regex Pattern]))
+  (:use [clojure.string :only [blank? join split]]))
 
 (defn def-path [& components]
   {:components (vec components) :separator "/"})
@@ -11,7 +10,8 @@
 (defn append [path & components]
   (assoc-in path [:components] (concat (path :components) (vec components))))
 
-;; append-if [path flag &components]
+(defn append-if [path flag & components]
+  (if flag (apply append path components) path))
 
 (defn parse-path [path-string path-separator]
   (let [regex (re-pattern (java.util.regex.Pattern/quote path-separator))
@@ -28,8 +28,6 @@
 (defn separator-filter [separator]
   (partial not= separator))
 
-(defn to-regex [string]
-  (re-pattern (java.util.regex.Pattern/quote string)))
 ;; strip-blank-components
 ;; clojure.string/blank?
 

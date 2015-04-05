@@ -37,6 +37,16 @@
     (is (= (nth components 2) "three"))
     (is (= (nth components 3) "four"))))
 
+(deftest append-if-test
+  (testing "the conditional addition of path components")
+  (let [path (def-path "one" "two")
+        path-2 (append-if path true "three")
+        path-3 (append-if path false "four")]
+    (is (= (count (path-2 :components)) 3))
+    (is (= (count (path-3 :components)) 2))
+    (is (= (last (path-2 :components)) "three"))
+    (is (= (last (path-3 :components)) "two"))))
+
 (deftest path-parsing-test
   (testing "the parsing of a path string into a path object(?)")
   (let [test-string "one, two, three"
