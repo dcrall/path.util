@@ -7,7 +7,7 @@
 (def test-path-3 (separator test-path-1 ", "))
 
 (deftest threading-macro-test
-  (testing "path utility usage with threading macros")
+  (testing "path usage with threading macros")
   (let [rendered-path
         (-> (def-path "one" "two")
             (separator ", ")
@@ -16,20 +16,21 @@
     (is (= rendered-path "one, two, three, four"))))
 
 (deftest new-path-has-correct-parts
-  (testing "a new path for the correct data elements")
+  (testing "a new path for the correct map keys")
   (let [path test-path-1]
     (is (contains? path :components))
-    (is (contains? path :separator))))
+    (is (contains? path :separator))
+    ))
 
 (deftest new-path-has-expected-components
-  (testing "the test path for expected components")
+  (testing "a new path for the expected components")
   (let [components (test-path-1 :components)]
     (is (= (count components) 2))
     (is (= (first components) "one"))
     (is (= (second components) "two"))))
 
 (deftest appended-path-has-expected-components
-  (testing "the second test path for appended components")
+  (testing "a path for appended components")
   (let [components (test-path-2 :components)]
     (is (= (count components) 4))
     (is (= (first components) "one"))
@@ -38,7 +39,7 @@
     (is (= (nth components 3) "four"))))
 
 (deftest append-if-test
-  (testing "the conditional addition of path components")
+  (testing "the conditional appending of path components")
   (let [path (def-path "one" "two")
         path-2 (append-if path true "three")
         path-3 (append-if path false "four")]
@@ -48,7 +49,7 @@
     (is (= (last (path-3 :components)) "two"))))
 
 (deftest path-parsing-test
-  (testing "the parsing of a path string into a path object(?)")
+  (testing "the parsing of a path string into a path map")
   (let [test-string "one, two, three"
         parsed-path (parse-path test-string ", ")
         components (parsed-path :components)
@@ -60,7 +61,7 @@
     (is (= rendered-path "one, two, three"))))
 
 (deftest path-string-test
-  (testing "the rendered string for the test path")
+  (testing "the rendering of a path into a string")
   (let [rendered-path-1 (path-string test-path-1)
         rendered-path-2 (path-string test-path-2)]
     (is (= rendered-path-1 "one/two"))
