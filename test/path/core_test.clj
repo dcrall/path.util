@@ -73,3 +73,23 @@
         rendered-path (path-string test-path-3)]
     (is (= separator ", "))
     (is (= rendered-path "one, two"))))
+
+(deftest empty-string-in-path
+  (testing "a path with an empty component")
+  (let [path (def-path "" "two" "three")
+        rendered-path (path-string path)]
+    (is (= rendered-path "two/three"))
+    (is (= (count (path :components)) 3))))
+
+(deftest nil-in-path
+  (testing "a path with a nil component")
+  (let [path (def-path nil "two" "three")
+        rendered-path (path-string path)]
+    (is (= rendered-path "two/three"))
+    (is (= (count (path :components)) 3))))
+
+(deftest separator-in-path
+  (testing "a path with a separator in components")
+  (let [path (def-path "one" "two" "/" "three")
+        rendered-path (path-string path)]
+    (is (= rendered-path "one/two/three"))))

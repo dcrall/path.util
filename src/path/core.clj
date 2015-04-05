@@ -19,22 +19,18 @@
     (-> (apply def-path components)
         (separator path-separator))))
 
-(defn path-string [path]
-  (clojure.string/join (path :separator) (path :components)))
-
 (def not-blank?
   (complement blank?))
 
 (defn separator-filter [separator]
   (partial not= separator))
 
-;; strip-blank-components
-;; clojure.string/blank?
-
-;; strip-separator-components
-;; filterv ??
-;; (filter not-blank? comps)
-
-;; (def not-sep? (partial not= "/"))
+(defn path-string [path]
+  (let [separator (path :separator)
+        components (path :components)
+        not-separator? (separator-filter separator)]
+    (->> (filterv not-blank? components)
+         (filterv not-separator?)
+         (join separator))))
 
 
