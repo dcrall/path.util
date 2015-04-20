@@ -93,3 +93,15 @@
   (let [path (def-path "one" "two" "/" "three")
         rendered-path (path-string path)]
     (is (= rendered-path "one/two/three"))))
+
+(deftest separator-at-the-beginning-of-component
+  (testing "a path with a component with trailing separator")
+  (let [path (def-path "one" "/two" "three")
+        rendered-path (path-string path)]
+    (is (= rendered-path "one/two/three"))))
+
+(deftest separator-at-the-end-of-component
+  (testing "a path with a component with trailing separator")
+  (let [path (def-path "one" "two/" "three")
+        rendered-path (path-string path)]
+    (is (= rendered-path "one/two/three"))))

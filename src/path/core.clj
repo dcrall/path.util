@@ -25,12 +25,25 @@
 (defn separator-filter [separator]
   (partial not= separator))
 
+(defn strip-first-template [separator target]
+  (let [pattern (str separator "+(.*)")
+        regex (re-pattern pattern)
+        match (re-matches regex target)]
+    (if match (last match) target)))
+
+(defn strip-last-template [separator target]
+  (let [pattern (str "(.+)" separator)
+        regex (re-pattern pattern)
+        match (re-matches regex target)]
+    (if match (last match) target)))
+
 (defn path-string [path]
-  (let [separator (path :separator)
-        components (path :components)
-        not-separator? (separator-filter separator)]
+  (let [{:keys [separator components]} path
+        not-separator? (separator-filter separator)
+        strip-first (partial strip-first-template separator)
+        strip-last (partial strip-last-template separator)]
     (->> (filterv not-blank? components)
          (filterv not-separator?)
+         (mapv strip-first)
+         (mapv strip-last)
          (join separator))))
-
-
