@@ -4,7 +4,7 @@ A Clojure library designed to help with basic path manipulation. An exercise in 
 
 ## Usage
 
-  (-> (def-path "one" "two")
+    (-> (def-path "one" "two")
       (separator ", ")
       (append "three" "four")
       (path-string))
