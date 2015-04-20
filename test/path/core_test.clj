@@ -117,3 +117,9 @@
   (let [path (def-path "one" "two" "three/")
         rendered-path (path-string path)]
     (is (= rendered-path "one/two/three/"))))
+
+(deftest empty-path
+  (testing "a path with no component parts")
+  (let [path (def-path nil nil)
+        rendered-path (path-string path)]
+    (is (= rendered-path ""))))
