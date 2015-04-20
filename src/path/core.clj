@@ -37,13 +37,36 @@
         match (re-matches regex target)]
     (if match (last match) target)))
 
+(defn safe [value]
+  (if (nil? value) "" value))
+
+(defn retain-leading-template [path path-string]
+  (let [{:keys [separator components]} path
+        first-component (safe (first components))]
+    (if (.startsWith first-component separator)
+      (str separator path-string)
+      path-string)))
+
+(defn retain-trailing-template [path path-string]
+  (let [{:keys [separator components]} path
+        last-component (safe (last components))]
+    (if (.endsWith last-component separator)
+      (str path-string separator)
+      path-string)))
+
+
 (defn path-string [path]
   (let [{:keys [separator components]} path
         not-separator? (separator-filter separator)
         strip-first (partial strip-first-template separator)
-        strip-last (partial strip-last-template separator)]
+        strip-last (partial strip-last-template separator)
+        retain-leading (partial retain-leading-template path)
+        retain-trailing (partial retain-trailing-template path)
+        ]
     (->> (filterv not-blank? components)
          (filterv not-separator?)
          (mapv strip-first)
          (mapv strip-last)
-         (join separator))))
+         (join separator)
+         (retain-leading)
+         (retain-trailing))))
